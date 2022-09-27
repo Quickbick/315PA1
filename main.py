@@ -1,7 +1,9 @@
-import constant
 from apyori import apriori
 import csv
 import pandas as pd
+
+def Confidence(item):
+    return str(item[2][0][2])
 
 index = 0
 temp = 0
@@ -39,7 +41,7 @@ with open('./browsing-data.txt', 'r') as csvfile:
             for x in range(len(row), maxLength):
                 new_str += ','
 
-        new_file = new_file + '\n' + new_str + '\n'
+        new_file = new_file + '\n' + new_str
 
 #writes into new file as even csv
 with open('./browsing-data-csv.txt', 'w+') as f:
@@ -61,15 +63,20 @@ records = []
 rows = data.shape[0]
 cols = data.shape[1]
 
-for i in range (0, 1000):
-    records.append([str(data.values[i,j]) for j in range(0,30)])
+for i in range (0, 100): #change to line num
+    records.append([str(data.values[i,j]) for j in range(0, maxLength)])
 
-productRules = apriori(records, min_support=0.0032, min_confience = 0.4, min_lift = 3, min_length = 2)
+productRules = apriori(records, min_support=0.0032, min_confience = 0.4, min_lift = 3, max_length = 2)
 productResults = list(productRules)
 
+productResults.sort(reverse=True, key=Confidence)
+print('Output A')
+i = 0
 for item in productResults:
-
+    if (i == 5):
+        break
     pair = item[0]
     items = [x for x in pair]
     print(items[0] + "->" + items[1])
-    print(" Confidence: " + str(item[2][0][2]))
+    print(' Confidence: ' + str(item[2][0][2]))
+    i+=1
