@@ -3,7 +3,10 @@ import csv
 import pandas as pd
 
 def Confidence(item):
-    return (str(item[2][0][2]), item.items)
+    return str(item[2][0][2])
+
+def Alphanumeric(item):
+    return str(item.items)
 
 index = 0
 temp = 0
@@ -72,6 +75,7 @@ productResults = list(productRules)
 
 outfile = open("./outfile.txt", 'w')
 
+productResults.sort(key=Alphanumeric)
 productResults.sort(reverse=True, key=Confidence)
 outfile.write('Output A\n')
 i = 0
@@ -85,6 +89,7 @@ for item in productResults:
 
 productRules = apriori(records, min_support=0.0032, min_confience = 0.4, min_lift = 3, max_length = 3)
 productResults = list(productRules)
+productResults.sort(key=Alphanumeric)
 productResults.sort(reverse=True, key=Confidence)
 productResults = filter(lambda x: len(x.items) > 2, productResults)
 
@@ -96,5 +101,6 @@ for item in productResults:
         break
     pair = item[0]
     items = [x for x in pair]
-    outfile.write(items[0] + " " + items[1] + " " + items[2] + " " + str(item[2][0][2]) + '\n')
-    i+=1
+    if (items[0] != 'nan' and items[1] != 'nan' and items[2] != 'nan'):
+        outfile.write(items[0] + " " + items[1] + " " + items[2] + " " + str(item[2][0][2]) + '\n')
+        i+=1
