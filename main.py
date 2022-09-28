@@ -3,7 +3,7 @@ import csv
 import pandas as pd
 
 def Confidence(item):
-    return str(item[2][0][2])
+    return (str(item[2][0][2]), items[0], items[1])
 
 index = 0
 temp = 0
@@ -47,6 +47,7 @@ with open('./browsing-data.txt', 'r') as csvfile:
 with open('./browsing-data-csv.txt', 'w+') as f:
     f.write(new_file)
 
+#opens csv file and sorts data
 file = open('./browsing-data-csv.txt', 'r')
 
 with open('./browsing-data-csv.txt') as csvfile:
@@ -77,6 +78,21 @@ for item in productResults:
         break
     pair = item[0]
     items = [x for x in pair]
-    print(items[0] + "->" + items[1])
-    print(' Confidence: ' + str(item[2][0][2]))
+    print(items[0] + "->" + items[1] + " " + str(item[2][0][2]))
+    i+=1
+
+productRules = apriori(records, min_support=0.0032, min_confience = 0.4, min_lift = 3, max_length = 3)
+productResults = list(productRules)
+productResults.sort(reverse=True, key=Confidence)
+productResults = filter(lambda x: len(x.items) > 2, productResults)
+
+print('======================')
+print('Output B')
+i = 0
+for item in productResults:
+    if (i == 5):
+        break
+    pair = item[0]
+    items = [x for x in pair]
+    print(items[0] + " " + items[1] + "->" + items[2] + " " + str(item[2][0][2]))
     i+=1
