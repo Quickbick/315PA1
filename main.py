@@ -67,7 +67,7 @@ records = []
 rows = data.shape[0]
 cols = data.shape[1]
 
-for i in range (0, 100):
+for i in range (0, 1000):
     records.append([str(data.values[i,j]) for j in range(0, maxLength)])
 
 productRules = apriori(records, min_support=0.0032, min_confience = 0.4, min_lift = 3, max_length = 2)
