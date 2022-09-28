@@ -67,7 +67,9 @@ records = []
 rows = data.shape[0]
 cols = data.shape[1]
 
-for i in range (0, 1000):
+#unsure if entire data was to be run or just sample
+#to change data amount ran change this to desired max line to read
+for i in range (0, 31101): 
     records.append([str(data.values[i,j]) for j in range(0, maxLength)])
 
 productRules = apriori(records, min_support=0.0032, min_confience = 0.4, min_lift = 3, max_length = 2)
