@@ -3,7 +3,7 @@ import csv
 import pandas as pd
 
 def Confidence(item):
-    return (str(item[2][0][2]), items[0], items[1])
+    return (str(item[2][0][2]), item.items)
 
 index = 0
 temp = 0
@@ -64,21 +64,23 @@ records = []
 rows = data.shape[0]
 cols = data.shape[1]
 
-for i in range (0, 100): #change to line num
+for i in range (0, 500):
     records.append([str(data.values[i,j]) for j in range(0, maxLength)])
 
 productRules = apriori(records, min_support=0.0032, min_confience = 0.4, min_lift = 3, max_length = 2)
 productResults = list(productRules)
 
+outfile = open("./outfile.txt", 'w')
+
 productResults.sort(reverse=True, key=Confidence)
-print('Output A')
+outfile.write('Output A\n')
 i = 0
 for item in productResults:
     if (i == 5):
         break
     pair = item[0]
     items = [x for x in pair]
-    print(items[0] + "->" + items[1] + " " + str(item[2][0][2]))
+    outfile.write(items[0] + " " + items[1] + " " + str(item[2][0][2]) + '\n')
     i+=1
 
 productRules = apriori(records, min_support=0.0032, min_confience = 0.4, min_lift = 3, max_length = 3)
@@ -86,13 +88,13 @@ productResults = list(productRules)
 productResults.sort(reverse=True, key=Confidence)
 productResults = filter(lambda x: len(x.items) > 2, productResults)
 
-print('======================')
-print('Output B')
+outfile.write('======================\n')
+outfile.write('Output B\n')
 i = 0
 for item in productResults:
     if (i == 5):
         break
     pair = item[0]
     items = [x for x in pair]
-    print(items[0] + " " + items[1] + "->" + items[2] + " " + str(item[2][0][2]))
+    outfile.write(items[0] + " " + items[1] + " " + items[2] + " " + str(item[2][0][2]) + '\n')
     i+=1
